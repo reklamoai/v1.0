@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html
   lang="sq"
-  data-theme="dark"
+  data-theme="light"
   className={cn(instrumentSerif.variable, oi.variable, rubikSpray.variable, barriecito.variable, rubikIso.variable, vastShadow.variable, uncialAntiqua.variable, honk.variable, danfo.variable, hachiMaru.variable, silkscreen.variable, "font-sans", geist.variable)}
 >
       <body className={inter.className}>

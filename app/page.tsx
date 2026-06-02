@@ -35,10 +35,10 @@ export default async function HomePage() {
         style={{
           position: "relative",
           overflow: "hidden",
-          paddingTop: "200px",
+          paddingTop: "clamp(130px, 20vw, 210px)",
           paddingBottom: "0px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
+          paddingLeft: "clamp(20px, 5vw, 24px)",
+          paddingRight: "clamp(20px, 5vw, 24px)",
           textAlign: "center",
         }}
       >
@@ -46,13 +46,10 @@ export default async function HomePage() {
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <h1
+            className="h-display"
             style={{
-              fontSize: "clamp(42px, 5.5vw, 68px)",
-              fontWeight: 800,
               color: "var(--text)",
-              lineHeight: 1.08,
-              letterSpacing: "-0.02em",
-              marginBottom: "20px",
+              marginBottom: "clamp(16px, 3vw, 24px)",
             }}
           >
             Reklamo me{" "}
@@ -60,28 +57,16 @@ export default async function HomePage() {
           </h1>
 
           <p
+            className="lead"
             style={{
-              fontSize: "16px",
-              color: "var(--text-muted)",
-              maxWidth: "440px",
-              margin: "0 auto 32px",
-              lineHeight: 1.6,
+              maxWidth: "560px",
+              margin: "0 auto clamp(28px, 5vw, 40px)",
             }}
           >
             Bibliotekë me prompts për reklama moderne, të ndara sipas kategorive reale të bizneseve.
           </p>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "12px",
-              marginBottom: "56px",
-            }}
-          >
-            <HeroButtons />
-          </div>
+          <HeroButtons />
         </div>
 
         {/* Marquee */}

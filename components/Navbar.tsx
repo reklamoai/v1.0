@@ -16,10 +16,10 @@ import {
 } from "@/components/animate-ui/components/radix/dropdown-menu";
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme") || "dark";
+    const saved = localStorage.getItem("theme") || "light";
     setTheme(saved);
     document.documentElement.setAttribute("data-theme", saved);
   }, []);
@@ -89,13 +89,13 @@ function ThemeToggle() {
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const [menuOpen, setMenuOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme") || "dark";
+    const saved = localStorage.getItem("theme") || "light";
     setTheme(saved);
   }, []);
 
@@ -150,15 +150,18 @@ export default function Navbar() {
       {/* Floating navbar */}
       <div style={{
         position: "fixed",
-        top: "20px",
-        left: "50%",
-        transform: "translateX(-50%)",
+        top: "16px",
+        left: 0,
+        right: 0,
         zIndex: 50,
         display: "flex",
         alignItems: "center",
-        gap: "12px",
+        justifyContent: "space-between",
+        gap: "clamp(8px, 2vw, 12px)",
+        padding: "0 clamp(12px, 4vw, 28px)",
       }}>
 
+       <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px, 2vw, 12px)", minWidth: 0 }}>
         {/* Logo pill */}
         <Link
           href="/"
@@ -169,10 +172,11 @@ export default function Navbar() {
             width: "56px",
             height: "56px",
             borderRadius: "50%",
-            backgroundColor: "rgba(20,20,20,0.7)",
+            backgroundColor: "var(--nav-glass)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            border: "1px solid var(--nav-border)",
+            boxShadow: "var(--nav-shadow)",
             textDecoration: "none",
             flexShrink: 0,
           }}
@@ -196,10 +200,11 @@ export default function Navbar() {
               height: "56px",
               padding: "0 24px",
               borderRadius: "28px",
-              backgroundColor: "rgba(20,20,20,0.7)",
+              backgroundColor: "var(--nav-glass)",
               backdropFilter: "blur(16px)",
               WebkitBackdropFilter: "blur(16px)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              border: "1px solid var(--nav-border)",
+              boxShadow: "var(--nav-shadow)",
               cursor: "pointer",
               color: "var(--text)",
               fontSize: "15px",
@@ -217,7 +222,7 @@ export default function Navbar() {
                 <line x1="3" y1="12" x2="21" y2="12"/>
               </svg>
             )}
-            Menu
+            <span className="hide-xs">Menu</span>
           </button>
 
           {/* Mega menu — gjithmonë në DOM, GSAP kontrollon visibility */}
@@ -228,25 +233,26 @@ export default function Navbar() {
               top: "calc(100% + 12px)",
               left: "50%",
               transform: "translateX(-50%)",
-              backgroundColor: "rgba(18,18,18,0.95)",
+              backgroundColor: "var(--bg-card)",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "20px",
-              padding: "8px",
-              minWidth: "300px",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.4)",
+              border: "1px solid var(--border)",
+              borderRadius: "22px",
+              padding: "10px",
+              width: "min(92vw, 340px)",
+              maxHeight: "min(78vh, 640px)",
+              overflowY: "auto",
+              boxShadow: "0 24px 64px rgba(10,10,10,0.18)",
               pointerEvents: menuOpen ? "all" : "none",
               opacity: 0,
-              overflow: "hidden",
             }}
           >
             {/* Main links */}
             {[
               { href: "/world-cup-2026", label: "World Cup 2026", sub: "⚽" },
-              { href: "/prompts", label: "Prompts", sub: "Të gjitha prompts" },
-              { href: "/prompts?tier=free", label: "Falas", sub: "50+ prompts falas" },
-              { href: "/prompts?tier=premium", label: "Premium", sub: "Prompts premium" },
+              { href: "/prompts", label: "Prompts", sub: "Të gjitha" },
+              { href: "/prompts?tier=free", label: "Falas", sub: "50+ falas" },
+              { href: "/prompts?tier=premium", label: "Premium", sub: "Premium" },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -257,51 +263,51 @@ export default function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "14px 16px",
-                  borderRadius: "12px",
+                  padding: "16px 16px",
+                  borderRadius: "14px",
                   textDecoration: "none",
-                  color: "#fff",
-                  transition: "background 0.15s",
+                  color: "var(--text)",
+                  transition: "background 0.18s var(--ease)",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)")}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--menu-hover)")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
-                <span style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.02em" }}>{item.label}</span>
-                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>{item.sub}</span>
+                <span style={{ fontSize: "clamp(1.25rem, 1rem + 1vw, 1.5rem)", fontWeight: 700, letterSpacing: "-0.02em" }}>{item.label}</span>
+                <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{item.sub}</span>
               </Link>
             ))}
 
-            <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.06)", margin: "4px 8px" }} />
+            <div style={{ height: "1px", backgroundColor: "var(--border)", margin: "6px 8px" }} />
 
             {/* Categories */}
-            <div className="menu-item" style={{ padding: "8px 16px 4px" }}>
-              <p style={{ fontSize: "11px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.3)", marginBottom: "8px" }}>
+            <div className="menu-item" style={{ padding: "8px 12px 6px" }}>
+              <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" as const, color: "var(--text-muted)", marginBottom: "10px" }}>
                 Kategoritë
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "6px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap" as const, gap: "8px" }}>
                 {categories.map((cat) => (
                   <Link
                     key={cat.id}
                     href={`/prompts?category=${cat.slug}`}
                     onClick={() => setMenuOpen(false)}
                     style={{
-                      fontSize: "12px",
+                      fontSize: "0.85rem",
                       fontWeight: 500,
-                      color: "rgba(255,255,255,0.6)",
+                      color: "var(--text-muted)",
                       textDecoration: "none",
-                      padding: "5px 10px",
+                      padding: "8px 14px",
                       borderRadius: "20px",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      transition: "all 0.15s",
+                      border: "1px solid var(--border)",
+                      transition: "all 0.18s var(--ease)",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#fff";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-                      e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
+                      e.currentTarget.style.color = "var(--accent)";
+                      e.currentTarget.style.borderColor = "var(--accent)";
+                      e.currentTarget.style.backgroundColor = "var(--accent-soft)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                      e.currentTarget.style.color = "var(--text-muted)";
+                      e.currentTarget.style.borderColor = "var(--border)";
                       e.currentTarget.style.backgroundColor = "transparent";
                     }}
                   >
@@ -310,43 +316,9 @@ export default function Navbar() {
                 ))}
               </div>
             </div>
-
-            <div style={{ height: "1px", backgroundColor: "rgba(255,255,255,0.06)", margin: "8px 8px 4px" }} />
-
-            {/* Bottom links */}
-            <div className="menu-item" style={{ display: "flex", gap: "4px", padding: "4px 8px 8px" }}>
-              {[
-                { href: "/pse-reklamo", label: "Pse reklamo.ai?" },
-                { href: "/ndihme", label: "Ndihmë" },
-                { href: "/faq", label: "FAQ" },
-              ].map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setMenuOpen(false)}
-                  style={{
-                    fontSize: "13px",
-                    color: "rgba(255,255,255,0.4)",
-                    textDecoration: "none",
-                    padding: "6px 10px",
-                    borderRadius: "8px",
-                    transition: "all 0.15s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#fff";
-                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.4)";
-                    e.currentTarget.style.backgroundColor = "transparent";
-                  }}
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
+       </div>
 
         {/* Right pill */}
         <div style={{
@@ -354,16 +326,18 @@ export default function Navbar() {
           alignItems: "center",
           gap: "10px",
           height: "56px",
+          flexShrink: 0,
           padding: "0 16px",
           borderRadius: "28px",
-          backgroundColor: "rgba(20,20,20,0.7)",
+          backgroundColor: "var(--nav-glass)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: "1px solid var(--nav-border)",
+          boxShadow: "var(--nav-shadow)",
         }}>
           <ThemeToggle />
 
-          <div style={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.08)" }} />
+          <div style={{ width: "1px", height: "20px", backgroundColor: "var(--nav-border)" }} />
 
           {session ? (
             <DropdownMenu>
@@ -394,7 +368,7 @@ export default function Navbar() {
                   }}>
                     {username?.charAt(0).toUpperCase()}
                   </div>
-                  Llogaria
+                  <span className="hide-xs">Llogaria</span>
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path d="M2 4L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -410,7 +384,6 @@ export default function Navbar() {
                 <DropdownMenuGroup>
                   {[
                     { href: "/dashboard", label: "Dashboard", icon: "⊞" },
-                    { href: "/board", label: "Marketing Boards", icon: "⊟" },
                     { href: "/dashboard/saved", label: "Prompts të ruajtura", icon: "♡" },
                     { href: "/dashboard/settings", label: "Cilësimet", icon: "⚙" },
                   ].map((item) => (
