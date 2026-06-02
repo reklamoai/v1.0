@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  username  String?
+  fullName  String?
+  isPremium Boolean  @default(false)
+  role      String   @default("USER")
+  banned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  boards Board[]  
+
+  savedPrompts SavedPrompt[]
+  purchases    Purchase[]
+  usages       PromptUsage[]
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String
+  slug    String   @unique
+  icon    String?
+  prompts Prompt[]
+}
+
+model Tag {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  prompts Prompt[]
+}
+
+model Prompt {
+  id         String   @id @default(cuid())
+  serialCode String   @unique
+  title      String
+  text       String
+  tier       String   @default("free")
+  imageUrl   String?
+  attributes Json?
+  categoryId String
+  createdAt  DateTime @default(now())
+boardItems BoardItem[] 
+  category Category      @relation(fields: [categoryId], references: [id])
+  tags     Tag[]
+  savedBy  SavedPrompt[]
+  usages   PromptUsage[]
+}
+
+model PromptUsage {
+  id        String   @id @default(cuid())
+  promptId  String
+  userId    String?
+  type      String
+  createdAt DateTime @default(now())
+
+  prompt Prompt @relation(fields: [promptId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id])
+}
+
+model SavedPrompt {
+  id       String @id @default(cuid())
+  userId   String
+  promptId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  prompt Prompt @relation(fields: [promptId], references: [id])
+}
+
+model Purchase {
+  id             String   @id @default(cuid())
+  userId         String
+  amount         Float
+  payseraOrderId String?
+  status         String   @default("pending")
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Board {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  isPublic    Boolean     @default(false)
+  slug        String?     @unique
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       BoardItem[]
+}
+
+model BoardItem {
+  id          String    @id @default(cuid())
+  boardId     String
+  board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  promptId    String?
+  prompt      Prompt?   @relation(fields: [promptId], references: [id], onDelete: SetNull)
+  title       String
+  note        String?
+ status      String    @default("idea")
+platform    String?
+  scheduledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
